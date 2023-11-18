@@ -13,11 +13,47 @@ for i in range(num_columnas - 1):
     for nombre in columna:
         nombres_sin_repetir.add(nombre)
     nombres_sin_repetir_lista.append(nombres_sin_repetir)
-print(f'las condiciones que puedes usar para cada columna son {nombres_sin_repetir_lista}')
 #=====================================#
+#asignacion de los grupos
+gruposX = []
+
+for casosX in nombres_sin_repetir_lista:
+    listaCasosX = list(casosX)
+    listaCasosX.sort()
+
+    if len(listaCasosX) > 6:
+        num_elementos_por_grupo = len(listaCasosX) // 6
+        residuo = len(listaCasosX) % 6
+        inicio = 0
+        fin = num_elementos_por_grupo + (1 if residuo > 0 else 0)
+        grupos_subgrupos = []
+
+        for _ in range(6):
+            grupoCasos = listaCasosX[inicio:fin]
+            grupos_subgrupos.append(grupoCasos)
+            inicio = fin
+            fin += num_elementos_por_grupo + (1 if residuo > 0 else 0)
+            residuo -= 1
+
+        gruposX.append(grupos_subgrupos)
+    else:
+        gruposX.append([listaCasosX])
+
+nuevoGruposX = []
+for lista in gruposX:
+    if (len(lista) == 1):
+        nuevaLista = lista[0]
+        nuevoGruposX.append(nuevaLista)
+    else:
+        nuevoGruposX.append(lista)
+numeroGruposDisponibles = len(nuevoGruposX)
+print(f'Los nuevos grupos disponibles son: {numeroGruposDisponibles}') 
+#=====================================#
+for i in range(len(nuevoGruposX)):
+    print(f'En la columna {i} puedes seleccionar los siguientes grupos {nuevoGruposX[i]}')
 #proceso de la "IA"
 #para el caso que queremos elegir, tenemos que obtener el valor de la cantidad de veces donde x cumple y entre la cantidad y's cuyo valor es 1
-casosX = [1, 14, 6, 0, 1, 1, 0]
+casosX = [1, nuevoGruposX[1][1], nuevoGruposX[2][1], 0, 0, 1, 0]
 casosY = ['Male', 'Female']
 casosY1 = []
 n_casosY = []
@@ -31,18 +67,35 @@ for caso_y in casosY:
     #iteración para la lista de condiciones x en el dataset
     for caso_x in casosX:
         x = caso_x
-        numero_casosY1 = 0
-        #iteracion sobre todas las filas de dataframe comparando la condicion X con el caso Y
-        for index, fila in df.iterrows():
-            #se obtiene 
-            valor_columnaX = fila.iloc[i] #columna donde se compara con la condicion x
-            valor_columnaY = fila.iloc[-1] #columna donde se compara con el caso y
-            if valor_columnaX == x and valor_columnaY == y:
-                numero_casosY1 += 1
-        casos_y_actual.append(numero_casosY1) #se agrega el numero de casos donde si se cumple la condicion a la lista de casos.
-        print(f'numero de casos donde x = {x} y y = {y}: {numero_casosY1}')
-        numero_casosY1 = 0
-        i += 1
+        if isinstance(x, list):
+            #print('el elemento es una lista')
+            numero_casosY1 = 0
+            #iteracion sobre todas las filas de dataframe comparando la condicion X con el caso Y
+            for index, fila in df.iterrows():
+                #se obtiene 
+                valor_columnaX = fila.iloc[i] #columna donde se compara con la condicion x
+                valor_columnaY = fila.iloc[-1] #columna donde se compara con el caso y
+                for elemento in x:
+                    if valor_columnaX == elemento and valor_columnaY == y:
+                        numero_casosY1 += 1
+            casos_y_actual.append(numero_casosY1) #se agrega el numero de casos donde si se cumple la condicion a la lista de casos.
+            print(f'Casos donde x = {x} y y = {y}: {numero_casosY1}')
+            numero_casosY1 = 0
+            i += 1
+        else:
+            #print("El elemento no es una lista.")
+            numero_casosY1 = 0
+            #iteracion sobre todas las filas de dataframe comparando la condicion X con el caso Y
+            for index, fila in df.iterrows():
+                #se obtiene 
+                valor_columnaX = fila.iloc[i] #columna donde se compara con la condicion x
+                valor_columnaY = fila.iloc[-1] #columna donde se compara con el caso y
+                if valor_columnaX == x and valor_columnaY == y:
+                    numero_casosY1 += 1
+            casos_y_actual.append(numero_casosY1) #se agrega el numero de casos donde si se cumple la condicion a la lista de casos.
+            print(f'Casos donde x = {x} y y = {y}: {numero_casosY1}')
+            numero_casosY1 = 0
+            i += 1
     i = 0
     casosY1.append(casos_y_actual)
     #print(casosY1)
@@ -63,7 +116,7 @@ for i in range(len(n_casosY)):
     ProbabilidadY1 = 1
     for numero_caso in casosYn:
         ProbabilidadY1 = (numero_caso / Y_n) * ProbabilidadY1
-        print(ProbabilidadY1)
+        #print(ProbabilidadY1)
     Probabilidades_Ys.append(ProbabilidadY1)
 print(Probabilidades_Ys)
 
@@ -79,4 +132,4 @@ for i in range(len(Probabilidades_Ys)):
     porcentajeProbabilidad = Probabilidades_Ys[i] / probabilidadTotal
     porcentajes.append(porcentajeProbabilidad)
     porcentajeProbabilidad = 0
-print('la probabilidad de que se cumpla el el caso con las condiciones brindadas',casosX,' es de...\n', porcentajes)
+print(f'la probabilidad de que se cumpla el el caso con las condiciones brindadas {casosX} es de...\n {porcentajes[0]*100}% a que sea {casosY[0]} y {porcentajes[1]*100}% a que sea {casosY[1]}')
