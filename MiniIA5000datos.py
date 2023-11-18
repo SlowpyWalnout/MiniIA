@@ -1,7 +1,7 @@
 import pandas as pd
-df = pd.read_csv('DataSet.csv')
+#df = pd.read_csv('datos_100.csv')
+df = pd.read_csv('datos.csv')
 num_columnas = df.shape[1]
-
 # Inicializa la lista para almacenar nombres sin repetir
 nombres_sin_repetir_lista = []
 # Itera sobre todas las columnas, excepto la última
@@ -13,12 +13,12 @@ for i in range(num_columnas - 1):
     for nombre in columna:
         nombres_sin_repetir.add(nombre)
     nombres_sin_repetir_lista.append(nombres_sin_repetir)
-print(f'las condiciones que puedes usar para cada columna son nombres_sin_repetir_lista')
+print(f'las condiciones que puedes usar para cada columna son {nombres_sin_repetir_lista}')
 #=====================================#
 #proceso de la "IA"
 #para el caso que queremos elegir, tenemos que obtener el valor de la cantidad de veces donde x cumple y entre la cantidad y's cuyo valor es 1
-casosX = ['soleado', 'templado', 'A', 'N']
-casosY = ['Si', 'No']
+casosX = [1, 14, 6, 0, 1, 1, 0]
+casosY = ['Male', 'Female']
 casosY1 = []
 n_casosY = []
 #iteración para cada y en el data set
@@ -40,7 +40,7 @@ for caso_y in casosY:
             if valor_columnaX == x and valor_columnaY == y:
                 numero_casosY1 += 1
         casos_y_actual.append(numero_casosY1) #se agrega el numero de casos donde si se cumple la condicion a la lista de casos.
-        #print(f'numero de casos donde hubo {x} y {y} se jugo: {numero_casosY1}')
+        print(f'numero de casos donde x = {x} y y = {y}: {numero_casosY1}')
         numero_casosY1 = 0
         i += 1
     i = 0
@@ -63,7 +63,7 @@ for i in range(len(n_casosY)):
     ProbabilidadY1 = 1
     for numero_caso in casosYn:
         ProbabilidadY1 = (numero_caso / Y_n) * ProbabilidadY1
-        #print(ProbabilidadY1)
+        print(ProbabilidadY1)
     Probabilidades_Ys.append(ProbabilidadY1)
 print(Probabilidades_Ys)
 
