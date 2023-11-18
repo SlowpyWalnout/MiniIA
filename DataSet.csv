@@ -1,0 +1,15 @@
+Cielo,Temperatura,Humedad,Viento,Se jugo
+lluvia,calor,A,N,No
+lluvia,calor,A,S,No
+nublado,calor,A,N,Si
+soleado,templado,A,N,Si
+soleado,frio,N,N,Si
+soleado,frio,N,S,No
+nublado,frio,N,S,Si
+lluvia,templado,A,N,No
+lluvia,frio,N,N,Si
+soleado,templado,N,N,Si
+lluvia,templado,N,S,Si
+nublado,templado,A,S,Si
+nublado,calor,N,N,Si
+soleado,templado,A,S,No
